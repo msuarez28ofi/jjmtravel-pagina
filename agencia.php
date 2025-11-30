@@ -11,14 +11,14 @@
     <h1>JJM TRAVEL</h1>
     <nav>
         <ul>
-            <li><a href="agencia.php">Inicio</a></li> 
+            <li><a href="agencia.php">Inicios</a></li> 
             <li><a href="#paquetes">Paquetes</a></li>
             <li><a href="registro.php">Reservar</a></li>
             <li><a href="#contacto">Contacto</a></li>
         </ul>
     </nav>
 </header>
-
+ 
 <section class="hero">
     <h2>Explora Margarita con los mejores paquetes turísticos</h2>
     <p>Hoteles aliados: Sunsol Punta Blanca, Sunsol Ecoland, Hesperia, Agua Dorada</p>
