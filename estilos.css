@@ -1,0 +1,413 @@
+/* ===== Estilos generales ===== */
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #e7f0fa; /* azul muy claro */
+    color: #1b1f2a;
+}
+
+/* ===== Header ===== */
+header {
+    background: #0a3d62; /* azul oscuro elegante */
+    padding: 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 110;
+    font-size: 26px;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Hero (agencia.php) ===== */
+.hero {
+    background: linear-gradient(rgba(10, 61, 98, 0.5), rgba(10, 61, 98, 0.5)),
+    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') center/cover no-repeat;
+    color: white;
+    text-align: center;
+    padding: 130px 20px;
+}
+
+.hero h2 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px #000;
+}
+
+.hero p {
+    font-size: 20px;
+    text-shadow: 2px 2px 3px #000;
+}
+
+/* ===== Contenido ===== */
+.contenido {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* 🚩 Nombre del hotel en hotel.php */
+.nombre-hotel-grande {
+    font-size: 5rem; 
+    color: #1b1f2a; 
+    text-align: left; 
+    margin: 0; 
+    padding: 0;
+    font-weight: 800; 
+    line-height: 1.1;
+    margin-bottom: 30px;
+}
+
+.contenido h3 {
+    font-size: 30px;
+    margin-top: 40px;
+    margin-bottom: 15px;
+}
+
+.contenido p {
+    font-size: 1.15em; 
+    line-height: 1.6; 
+    color: #333; 
+    max-width: 900px;
+}
+
+/* ===== Botón general ===== */
+.btn {
+    display: inline-block;
+    background: #0a3d62;
+    color: white;
+    padding: 12px 22px;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-top: 20px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #074569;
+}
+
+/* ===== Footer ===== */
+footer {
+    background: #0a3d62;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+}
+
+/* ========================================================== */
+/* 🚩 CAMBIOS APLICADOS: Tarjetas de Hoteles más grandes (agencia.php) */
+/* ========================================================== */
+
+.hoteles {
+    /* CUADRÍCULA DE 3 COLUMNAS para que las tarjetas sean más anchas y grandes */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px; /* Aumentamos el espacio entre tarjetas */
+    margin-top: 30px;
+}
+
+.card {
+    background: white;
+    padding: 20px; /* Aumentamos el padding interno */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Sombra más notable */
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Efecto de elevación */
+}
+
+.card img {
+    /* Aumentamos la altura de la imagen */
+    width: 100%;
+    height: 220px; 
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.card h4 {
+    /* Aumentamos el tamaño del título */
+    margin: 15px 0 10px;
+    font-size: 24px;
+}
+
+.card p {
+    font-size: 16px;
+    color: #555;
+}
+/* ========================================================== */
+
+
+/* ===== Formularios ===== */
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.formulario input {
+    padding: 10px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* ===== Servicios (Ajuste a columnas) */
+.servicios {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Más columnas */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.servicios li {
+    background: white; /* Cambiado a blanco para que coincida con la imagen */
+    padding: 12px;
+    border: 1px solid #ddd; /* Borde más sutil */
+    border-radius: 5px;
+    font-weight: 500;
+    color: #1b1f2a;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* ================================================== */
+/* SLIDER DE IMÁGENES (CARRUSEL AUTOMÁTICO CSS)       */
+/* ================================================== */
+
+/* Contenedor principal del Slider (Caja Naranja) */
+.slider-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 40px auto; 
+    overflow: hidden; 
+    border-radius: 5px; /* Borde menos agresivo */
+    /* Efecto de marco (similar a lo solicitado en la imagen) */
+    border: 10px solid white; /* Borde blanco para separar */
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); 
+    height: 400px; /* Altura ajustada */
+}
+
+/* Contenedor de las imágenes (la tira que se moverá) */
+.image-slider {
+    display: flex; 
+    width: 500%; 
+    height: 100%;
+    animation: slide-animation 25s infinite; 
+}
+
+/* Estilo para cada imagen dentro del slider */
+.image-slider img {
+    width: calc(100% / 5); 
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0; 
+}
+
+/* Definición de la Animación para 5 imágenes */
+@keyframes slide-animation {
+    0% { transform: translateX(0%); } 
+    16% { transform: translateX(0%); }
+    20% { transform: translateX(-20%); } 
+    36% { transform: translateX(-20%); }
+    40% { transform: translateX(-40%); }
+    56% { transform: translateX(-40%); }
+    60% { transform: translateX(-60%); }
+    76% { transform: translateX(-60%); }
+    80% { transform: translateX(-80%); }
+    96% { transform: translateX(-80%); }
+    100% { transform: translateX(0%); }
+}
+
+/* ================================================== */
+/* NUEVOS ESTILOS PARA agengia.php                    */
+/* ================================================== */
+
+/* Estilos para la sección de Paquetes */
+.paquetes-section {
+    background: #f0f8ff; /* Fondo ligeramente diferente para destacar */
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.paquetes-grid {
+    display: grid;
+    
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.paquete-card {
+    transition: transform 0.3s;
+}
+
+.paquete-card:hover {
+    transform: translateY(-5px); /* Pequeño efecto al pasar el mouse */
+}
+
+.paquete-card .precio {
+    font-size: 1.5em;
+    color: #0a3d62; /* Color principal */
+    font-weight: bold;
+    margin: 15px 0 10px;
+}
+
+/* Estilos para la sección de Contacto */
+.contacto-section {
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.contacto-info {
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: left;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.contacto-info p {
+    font-size: 1.1em;
+    line-height: 1.8;
+}
+
+.contacto-info p a {
+    color: #0a3d62;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Estilo para el resumen de habitaciones en paquete.php */
+.distribucion-resumen {
+    background: #ffffff;
+    padding: 15px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.distribucion-resumen ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    font-size: 1em;
+}
+
+.distribucion-resumen li {
+    background: #e7f0fa;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-weight: bold;
+    color: #0a3d62;
+}
+
+/* ===== Estilos para Comprobante (reservar.php) ===== */
+
+.comprobante {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    max-width: 700px;
+    margin: 30px auto;
+}
+
+.comprobante h2 {
+    color: #0a3d62;
+    text-align: center;
+    border-bottom: 3px solid #0a3d62;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.comprobante h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.comprobante table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
+.comprobante td {
+    padding: 8px 0;
+    border-bottom: 1px dashed #ccc;
+}
+
+.comprobante td:first-child {
+    font-weight: bold;
+    width: 40%;
+}
+
+.total-final {
+    background: #0a3d62;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin-top: 40px;
+}
+
+.total-final h4 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.total-final span {
+    font-size: 3em;
+    font-weight: 800;
+    display: block;
+    margin-top: 5px;
+}
+
+.nota-final {
+    text-align: center;
+    margin-top: 30px;
+    font-style: italic;
+    color: #555;
+}
