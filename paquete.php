@@ -1,6 +1,19 @@
 <?php
 require_once "conexion.php";
 
+// ======================================================
+// MISMO MAPEO QUE hotel.php Y registro.php
+// (Solo PuntaBlanca y EcoLand necesitan corrección)
+// ======================================================
+$mapa_hoteles = [
+    "puntablanca" => "SUNSOL PUNTA BLANCA",
+    "ecoland"     => "SUNSOL ECOLAND",
+
+    // Estos ya funcionaban perfectamente con sus claves
+    "hesperia"    => "HOTEL HESPERIA",
+    "aguadorada"  => "HOTEL AGUA DORADA"
+];
+
 // ===============================================
 // VALIDAR DATOS RECIBIDOS
 // ===============================================
@@ -12,18 +25,29 @@ if ($id_presupuesto == 0 || $hotel_code == "") {
 }
 
 // ===============================================
-// OBTENER ID DEL HOTEL REAL
+// VALIDAR QUE EL HOTEL EXISTA EN EL MAPEO
+// ===============================================
+if (!isset($mapa_hoteles[$hotel_code])) {
+    die("Error: hotel no existe en el mapa interno.");
+}
+
+$nombre_real = $mapa_hoteles[$hotel_code];
+
+// ===============================================
+// OBTENER HOTEL DESDE BD
 // ===============================================
 $stmt = $conn->prepare("
-    SELECT id_hotel, nombre 
+    SELECT id_hotel, nombre
     FROM hoteles
-    WHERE LOWER(REPLACE(nombre, ' ', '')) = ?
+    WHERE nombre = ?
 ");
-$stmt->bind_param("s", $hotel_code);
+$stmt->bind_param("s", $nombre_real);
 $stmt->execute();
 $rs = $stmt->get_result();
 
-if ($rs->num_rows == 0) die("Error: hotel no encontrado.");
+if ($rs->num_rows == 0) {
+    die("Error: hotel no encontrado en la BD.");
+}
 
 $hotel = $rs->fetch_assoc();
 $id_hotel = $hotel["id_hotel"];
