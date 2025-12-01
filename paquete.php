@@ -1,108 +1,63 @@
 <?php
-// Recibir datos del turista desde registro.php
-$nombre = $_GET["nombre"] ?? "N/A";
-$apellido = $_GET["apellido"] ?? "N/A";
-$cedula = $_GET["cedula"] ?? "N/A";
-$ubicacion = $_GET["ubicacion"] ?? "N/A";
-$telefono = $_GET["telefono"] ?? "N/A";
-$correo = $_GET["correo"] ?? "N/A";
-// Clave del hotel que viene de registro.php. Ejemplo: 'puntablanca'
-$hotel_seleccionado_key = $_GET["hotel"] ?? ''; 
+require "conexion.php";
 
-// =======================================================
-// LÓGICA DE TARIFAS POR TIPO DE HABITACIÓN (SIMULADA)
-// =======================================================
-
-// Costos de Traslado y Tipos de Habitación
-$COSTO_TRASLADO = 50; 
-$costoTrasladoAplicado = 0; 
-
-// Tarifas Base por NOCHE y por TIPO DE HABITACIÓN
-$TARIFAS_HABITACION = [
-    'puntablanca' => ['nombre' => 'SUNSOL PUNTA BLANCA', 'Individual' => 60, 'Doble' => 100, 'Triple' => 135],
-    'ecoland'     => ['nombre' => 'SUNSOL ECOLAND', 'Individual' => 55, 'Doble' => 90, 'Triple' => 120],
-    'hesperia'    => ['nombre' => 'HOTEL HESPERIA', 'Individual' => 80, 'Doble' => 130, 'Triple' => 175],
-    'aguadorada'  => ['nombre' => 'HOTEL AGUA DORADA', 'Individual' => 70, 'Doble' => 115, 'Triple' => 150],
+/* ==========================================================
+   MAPA ENTRE LAS CLAVES TEXTUALES Y LOS ID DE TU BASE REAL
+   Esto mantiene tu DISEÑO ORIGINAL funcionando sin cambios.
+   ========================================================== */
+$hotel_map = [
+    "puntablanca" => 1,
+    "ecoland"     => 2,
+    "hesperia"    => 3,
+    "aguadorada"  => 4
 ];
 
-// Validamos si la clave del hotel recibido existe en nuestras tarifas
-if (!array_key_exists($hotel_seleccionado_key, $TARIFAS_HABITACION)) {
-    // Si la clave no existe o no se recibió, forzamos un mensaje de error y no mostramos el formulario
-    $error_hotel = "Error: El hotel seleccionado no es válido o no se especificó.";
-} else {
-    $error_hotel = null;
+// Recibir la clave textual desde hotel.php
+$hotel_key = $_GET["hotel"] ?? "";
+
+// Validar clave
+if (!isset($hotel_map[$hotel_key])) {
+    die("Error: hotel no válido.");
 }
 
+// Obtener el id_hotel real de la BD
+$id_hotel = $hotel_map[$hotel_key];
 
-// Cuando el usuario envíe la información del viaje (el formulario en esta misma página)
-if ($_SERVER["REQUEST_METHOD"] === "POST" && $error_hotel === null) {
+/* ==========================================================
+   OBTENER INFORMACIÓN DEL HOTEL DESDE LA BASE DE DATOS
+   ========================================================== */
+$sql_hotel = "SELECT * FROM hoteles WHERE id_hotel = $id_hotel";
+$res_hotel = $conn->query($sql_hotel);
+$hotel = $res_hotel->fetch_assoc();
 
-    // Datos del formulario de viaje
-    $num_ind = (int)$_POST["hab_individual"];
-    $num_dob = (int)$_POST["hab_doble"];
-    $num_tri = (int)$_POST["hab_triple"];
-    $entrada = $_POST["entrada"];
-    $salida = $_POST["salida"];
-    $traslado = $_POST["traslado"] ?? "no"; 
-
-    // Cálculo del total de personas y habitaciones
-    $total_habitaciones = $num_ind + $num_dob + $num_tri;
-    $total_personas = ($num_ind * 1) + ($num_dob * 2) + ($num_tri * 3);
-
-    if ($total_habitaciones === 0) {
-        die("Error: Debe seleccionar al menos una habitación para continuar la reserva.");
-    }
-    
-    // Validar que las fechas sean válidas y calcular días y noches
-    $fecha1 = strtotime($entrada);
-    $fecha2 = strtotime($salida);
-    $dias = ($fecha2 - $fecha1) / 86400;
-    $noches = $dias; // Para fines de cálculo, noches = días
-
-    if ($dias < 1) {
-        die("Error: La fecha de salida debe ser mayor que la de entrada.");
-    }
-
-    // LÓGICA DE TRASLADO: Aplicar el costo si el usuario lo marcó
-    if ($traslado === "si") {
-        $costoTrasladoAplicado = $COSTO_TRASLADO;
-    }
-    
-    // =======================================================
-    // CALCULAR TOTALES POR EL HOTEL SELECCIONADO
-    // =======================================================
-    $tarifa_hotel = $TARIFAS_HABITACION[$hotel_seleccionado_key];
-
-    $costo_base_habitaciones = 0;
-        
-    // Sumar costo de Habitaciones Individuales
-    $costo_base_habitaciones += $num_ind * $tarifa_hotel['Individual'] * $noches;
-        
-    // Sumar costo de Habitaciones Dobles
-    $costo_base_habitaciones += $num_dob * $tarifa_hotel['Doble'] * $noches;
-        
-    // Sumar costo de Habitaciones Triples
-    $costo_base_habitaciones += $num_tri * $tarifa_hotel['Triple'] * $noches;
-        
-    // Costo Final = Costo Habitaciones + Costo Traslado
-    $total_final = $costo_base_habitaciones + $costoTrasladoAplicado;
-
-    // Guardamos el nombre legible del hotel
-    $nombre_hotel_legible = $tarifa_hotel['nombre'];
+if (!$hotel) {
+    die("Error: hotel no encontrado en la base de datos.");
 }
+
+/* ==========================================================
+   OBTENER TIPOS DE HABITACIÓN DISPONIBLES
+   (Individual, Doble, Triple, Cuádruple)
+   ========================================================== */
+$sql_tipos = "SELECT * FROM tipo_habitaciones ORDER BY id_tipo_habitacion";
+$res_tipos = $conn->query($sql_tipos);
+
+/* ==========================================================
+   SI AÚN NO HAN ENVIADO EL FORMULARIO, MOSTRARLO
+   ========================================================== */
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Selección de Paquete</title>
+    <title>Seleccionar Paquete</title>
     <link rel="stylesheet" href="estilos.css">
 </head>
+
 <body>
 
 <header>
-    <h1>Paquetes Disponibles</h1>
+    <h1>Reservar en <?php echo $hotel["nombre"]; ?></h1>
     <nav>
         <ul>
             <li><a href="agencia.php">Inicio</a></li>
@@ -112,86 +67,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && $error_hotel === null) {
 
 <section class="contenido">
 
-<?php if ($error_hotel !== null): ?>
-    <h3>Error en la Reserva</h3>
-    <p class="error-mensaje"><?php echo $error_hotel; ?></p>
-    <p>Por favor, regrese al <a href="agencia.php">Inicio</a> y seleccione un hotel válido.</p>
-
-<?php elseif (!isset($total_final)): ?>
-    
-    <!-- PANTALLA INICIAL PARA SELECCIONAR HABITACIONES Y FECHAS -->
-    
-    <h3>Datos del Viaje en: **<?php echo $TARIFAS_HABITACION[$hotel_seleccionado_key]['nombre']; ?>**</h3>
-    <p>Hola **<?php echo $nombre . " " . $apellido; ?>**, ingresa las fechas y la distribución de habitaciones que deseas.</p>
+    <h3>Seleccione fechas y habitaciones</h3>
 
     <form method="POST" class="formulario">
 
-        <!-- GRUPO DE SELECCIÓN DE HABITACIONES -->
-        <fieldset class="grupo-habitaciones">
-            <legend>Selección de Habitaciones 🏨</legend>
-            
-            <label>Habitaciones Individuales (1 pers. - $<?php echo $TARIFAS_HABITACION[$hotel_seleccionado_key]['Individual']; ?>/noche):</label>
-            <input type="number" name="hab_individual" min="0" value="0">
+        <input type="hidden" name="id_hotel" value="<?php echo $id_hotel; ?>">
+        <input type="hidden" name="hotel_key" value="<?php echo $hotel_key; ?>">
 
-            <label>Habitaciones Dobles (2 pers. - $<?php echo $TARIFAS_HABITACION[$hotel_seleccionado_key]['Doble']; ?>/noche):</label>
-            <input type="number" name="hab_doble" min="0" value="0">
-            
-            <label>Habitaciones Triples (3 pers. - $<?php echo $TARIFAS_HABITACION[$hotel_seleccionado_key]['Triple']; ?>/noche):</label>
-            <input type="number" name="hab_triple" min="0" value="0">
-        </fieldset>
-        <!-- FIN GRUPO DE SELECCIÓN -->
+        <h3>Fechas</h3>
 
-        <label>Fecha de entrada:</label>
+        <label>Entrada:</label>
         <input type="date" name="entrada" required>
 
-        <label>Fecha de salida:</label>
+        <label>Salida:</label>
         <input type="date" name="salida" required>
-        
-        <!-- Campo para preguntar por Traslado -->
-        <label>¿Desea traslado Aeropuerto/Puerto - Hotel (Costo fijo: $<?php echo $COSTO_TRASLADO; ?>)?</label>
-        <select name="traslado" required>
-            <option value="no">No</option>
-            <option value="si">Sí</option>
-        </select>
+
+        <label>Cantidad de Personas:</label>
+        <input type="number" min="1" name="cantidad_personas" required>
+
+        <h3>Habitaciones</h3>
+
+        <?php while ($tipo = $res_tipos->fetch_assoc()): ?>
+            <label><?php echo $tipo["descripcion"]; ?> (capacidad <?php echo $tipo["capacidad_maxima"]; ?>):</label>
+            <input type="number" name="hab_<?php echo $tipo["id_tipo_habitacion"]; ?>" value="0" min="0">
+        <?php endwhile; ?>
 
         <button type="submit" class="btn">Calcular</button>
     </form>
-
-<?php else: ?>
-
-    <!-- PANTALLA DE RESULTADOS Y RESERVA FINAL -->
-    
-    <h3>Cálculo de Reserva para **<?php echo $nombre_hotel_legible; ?>**</h3>
-    <p>Calculado para **<?php echo $total_personas; ?>** personas, en **<?php echo $total_habitaciones; ?>** habitaciones durante **<?php echo $dias; ?>** días / **<?php echo $noches; ?>** noches.
-    </p>
-    
-    <div class="distribucion-resumen">
-        <p>Distribución seleccionada:</p>
-        <ul>
-            <?php if ($num_ind > 0) echo "<li>{$num_ind} Habitación(es) Individual(es)</li>"; ?>
-            <?php if ($num_dob > 0) echo "<li>{$num_dob} Habitación(es) Doble(s)</li>"; ?>
-            <?php if ($num_tri > 0) echo "<li>{$num_tri} Habitación(es) Triple(s)</li>"; ?>
-        </ul>
-    </div>
-
-    <?php if ($costoTrasladoAplicado > 0): ?>
-        <p class="nota-traslado">✅ Traslado Incluido: Se ha añadido un costo de $<?php echo $costoTrasladoAplicado; ?>.</p>
-    <?php else: ?>
-        <p class="nota-traslado">❌ Traslado No Incluido.</p>
-    <?php endif; ?>
-
-    <div class="card card-reserva-final">
-        <h4>Total a Pagar en <?php echo $nombre_hotel_legible; ?></h4>
-        <p>Monto Total: <strong>$<?php echo number_format($total_final, 2); ?></strong></p>
-
-        <!-- Redirección a reservar.php con todos los datos necesarios -->
-        <a class="btn"
-            href="reservar.php?hotel=<?php echo $hotel_seleccionado_key; ?>&total=<?php echo $total_final; ?>&personas=<?php echo $total_personas; ?>&dias=<?php echo $dias; ?>&noches=<?php echo $noches; ?>&entrada=<?php echo $entrada; ?>&salida=<?php echo $salida; ?>&nombre=<?php echo $nombre; ?>&apellido=<?php echo $apellido; ?>&cedula=<?php echo $cedula; ?>&telefono=<?php echo $telefono; ?>&correo=<?php echo $correo; ?>&traslado=<?php echo $costoTrasladoAplicado; ?>&num_ind=<?php echo $num_ind; ?>&num_dob=<?php echo $num_dob; ?>&num_tri=<?php echo $num_tri; ?>">
-            Confirmar Reserva
-        </a>
-    </div>
-
-<?php endif; ?>
 
 </section>
 
@@ -201,3 +103,83 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && $error_hotel === null) {
 
 </body>
 </html>
+
+<?php
+    exit();
+}
+
+/* ==========================================================
+   PROCESAR FORMULARIO → CALCULAR PRECIOS REALES
+   ========================================================== */
+
+$id_hotel = $_POST["id_hotel"];
+$hotel_key = $_POST["hotel_key"];
+$entrada = $_POST["entrada"];
+$salida = $_POST["salida"];
+$cantidad_personas = intval($_POST["cantidad_personas"]);
+
+// 1) Insertar presupuesto (aquí NO se conoce el monto aún)
+$sql_insert_pres = "
+    INSERT INTO presupuesto_reservas (id_turista, id_tarifario, fecha_reserva_desde, fecha_reserva_hasta, cantidad_personas)
+    VALUES (1, 1, '$entrada', '$salida', $cantidad_personas)
+";
+$conn->query($sql_insert_pres);
+
+$id_presupuesto = $conn->insert_id;
+
+// 2) Volver a leer tipos
+$sql_tipos = "SELECT * FROM tipo_habitaciones ORDER BY id_tipo_habitacion";
+$res_tipos = $conn->query($sql_tipos);
+
+$total_final = 0;
+$detalles = [];
+
+// 3) Procesar habitaciones seleccionadas
+while ($tipo = $res_tipos->fetch_assoc()) {
+
+    $id_tipo = $tipo["id_tipo_habitacion"];
+    $cantidad = intval($_POST["hab_$id_tipo"]);
+
+    if ($cantidad > 0) {
+
+        // Buscar la tarifa real según el hotel
+        $sql_tarifa = "
+            SELECT tarifa 
+            FROM tarifarios 
+            WHERE id_hotel = $id_hotel 
+              AND id_tipo_habitacion = $id_tipo
+            LIMIT 1
+        ";
+        $res_tarifa = $conn->query($sql_tarifa);
+        $tarifa = $res_tarifa->fetch_assoc()["tarifa"];
+
+        // Insertar detalle
+        $sql_ins_det = "
+            INSERT INTO detalle_habitaciones_presupuesto (id_presupuesto, id_tipo_habitacion, cantidad_habitaciones)
+            VALUES ($id_presupuesto, $id_tipo, $cantidad)
+        ";
+        $conn->query($sql_ins_det);
+
+        $detalles[] = [
+            "tipo" => $tipo["descripcion"],
+            "cantidad" => $cantidad,
+            "tarifa" => $tarifa
+        ];
+
+        $total_final += $cantidad * $tarifa;
+    }
+}
+
+// 4) Actualizar monto total del presupuesto
+$sql_upd = "
+    UPDATE presupuesto_reservas 
+    SET monto_total = $total_final
+    WHERE id_presupuesto = $id_presupuesto
+";
+$conn->query($sql_upd);
+
+// 5) Redirigir a reserva final
+header("Location: reserva.php?id_presupuesto=$id_presupuesto&hotel=$hotel_key");
+exit();
+
+?>

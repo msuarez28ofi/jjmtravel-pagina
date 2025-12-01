@@ -1,32 +1,76 @@
 <?php
-// =========================================================================
-// RECUPERAR DATOS DE LA RESERVA (Vienen por URL desde paquete.php)
-// =========================================================================
-$hotel = $_GET["hotel"] ?? "N/A";
-$total = $_GET["total"] ?? 0;
-$personas = $_GET["personas"] ?? 0;
-$noches = $_GET["noches"] ?? 0;
+require "conexion.php";
 
-// Datos del turista
-$nombre = urldecode($_GET["nombre"] ?? "");
-$apellido = urldecode($_GET["apellido"] ?? "");
-$cedula = $_GET["cedula"] ?? "N/A";
-$telefono = $_GET["telefono"] ?? "N/A";
-$correo = $_GET["correo"] ?? "N/A";
+/* ==========================================================
+   VALIDAR ID DEL PRESUPUESTO
+   ========================================================== */
+$id_presupuesto = $_GET["id_presupuesto"] ?? 0;
+$hotel_key = $_GET["hotel"] ?? "";
 
-// NOTA IMPORTANTE: En este punto, se ejecutaría la lógica de SQL para:
-// 1. Verificar disponibilidad de la habitación.
-// 2. Insertar el registro del Turista si es nuevo.
-// 3. Insertar el registro de la Reserva con el total calculado.
+if ($id_presupuesto == 0) {
+    die("Error: presupuesto no válido.");
+}
 
-// Simulando la "grabación" exitosa
-$exito = true;
-// Generar un código de reserva simulado
-$codigo_reserva = "RES-" . strtoupper(substr(md5(time()), 0, 6)); 
-$fecha_reserva = date("d/m/Y");
+/* ==========================================================
+   MAPA ENTRE CLAVE TEXTUAL Y ID HOTEL REAL
+   ========================================================== */
+$hotel_map = [
+    "puntablanca" => 1,
+    "ecoland"     => 2,
+    "hesperia"    => 3,
+    "aguadorada"  => 4
+];
+
+$id_hotel = $hotel_map[$hotel_key] ?? 0;
+
+/* ==========================================================
+   CARGAR PRESUPUESTO DESDE LA BASE DE DATOS
+   ========================================================== */
+$sql_pre = "
+    SELECT *
+    FROM presupuesto_reservas
+    WHERE id_presupuesto = $id_presupuesto
+    LIMIT 1
+";
+$res_pre = $conn->query($sql_pre);
+$pres = $res_pre->fetch_assoc();
+
+if (!$pres) {
+    die("Error: presupuesto no encontrado.");
+}
+
+/* ==========================================================
+   CARGAR DETALLES DEL PRESUPUESTO
+   ========================================================== */
+$sql_det = "
+    SELECT dhp.*, th.descripcion, th.capacidad_maxima
+    FROM detalle_habitaciones_presupuesto dhp
+    INNER JOIN tipo_habitaciones th ON dhp.id_tipo_habitacion = th.id_tipo_habitacion
+    WHERE dhp.id_presupuesto = $id_presupuesto
+";
+$res_det = $conn->query($sql_det);
+
+/* ==========================================================
+   CARGAR INFORMACIÓN DEL HOTEL
+   ========================================================== */
+$sql_hotel = "SELECT * FROM hoteles WHERE id_hotel = $id_hotel";
+$res_hotel = $conn->query($sql_hotel);
+$hotel = $res_hotel->fetch_assoc();
+
+/* ==========================================================
+   CREAR LA RESERVA FINAL
+   ========================================================== */
+$codigo = "RES-" . strtoupper(substr(md5(time()), 0, 6));
+$monto_pagar = $pres["monto_total"];
+
+$sql_insert = "
+    INSERT INTO reservas (id_presupuesto, codigo_reserva, monto_pagar, status)
+    VALUES ($id_presupuesto, '$codigo', $monto_pagar, 'PENDIENTE')
+";
+
+$conn->query($sql_insert);
 
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -34,51 +78,71 @@ $fecha_reserva = date("d/m/Y");
     <title>Reserva Confirmada</title>
     <link rel="stylesheet" href="estilos.css">
 </head>
+
 <body>
 
 <header>
-    <h1>Confirmación de Reserva</h1>
+    <h1>Reserva Confirmada</h1>
     <nav>
         <ul>
-            <li><a href="index.php">Inicio</a></li>
+            <li><a href="agencia.php">Inicio</a></li>
         </ul>
     </nav>
 </header>
 
-<section class="contenido" style="text-align: center;">
+<section class="contenido">
 
-    <?php if ($exito): ?>
-        <div class="formulario" style="max-width: 600px; padding: 40px; border-left: 5px solid #2ecc71;">
-            <h3 style="color: #2ecc71; margin-top: 0;">¡Reserva Exitosa!</h3>
-            <p style="font-size: 18px;">Su paquete turístico ha sido confirmado y registrado en nuestro sistema.</p>
+    <div class="comprobante">
 
-            <table style="width: 100%; margin: 25px 0; text-align: left; border-collapse: collapse;">
-                <tr><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><strong>Código de Reserva:</strong></td><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><?php echo $codigo_reserva; ?></td></tr>
-                <tr><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><strong>Fecha de Reserva:</strong></td><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><?php echo $fecha_reserva; ?></td></tr>
-                <tr><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><strong>Hotel Seleccionado:</strong></td><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><?php echo $hotel; ?></td></tr>
-                <tr><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><strong>Duración:</strong></td><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><?php echo $noches; ?> Noches</td></tr>
-                <tr><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><strong>N° de Huéspedes:</strong></td><td style="padding: 8px; border-bottom: 1px dashed #ddd;"><?php echo $personas; ?></td></tr>
-                <tr><td style="padding: 8px; font-size: 20px; color: #e67e22;"><strong>TOTAL PAGADO:</strong></td><td style="padding: 8px; font-size: 20px; color: #e67e22;"><strong>$<?php echo number_format($total, 2); ?></strong></td></tr>
-            </table>
+        <h2>Su Reserva ha sido Generada</h2>
 
-            <h4>Datos del Turista</h4>
-            <ul style="list-style: none; padding: 0; text-align: left;">
-                <li><strong>Nombre:</strong> <?php echo $nombre . " " . $apellido; ?></li>
-                <li><strong>Cédula:</strong> <?php echo $cedula; ?></li>
-                <li><strong>Correo:</strong> <?php echo $correo; ?></li>
-                <li><strong>Teléfono:</strong> <?php echo $telefono; ?></li>
-            </ul>
+        <h3>Detalles del Hotel</h3>
+        <table>
+            <tr><td>Hotel:</td><td><?php echo $hotel["nombre"]; ?></td></tr>
+            <tr><td>Dirección:</td><td><?php echo $hotel["direccion"]; ?></td></tr>
+            <tr><td>Categoría:</td><td><?php echo $hotel["categoria"]; ?> estrellas</td></tr>
+        </table>
 
-            <p style="margin-top: 30px; font-style: italic;">Recibirá un correo electrónico con los detalles de su viaje. ¡Gracias por elegirnos!</p>
+        <h3>Fechas</h3>
+        <table>
+            <tr><td>Entrada:</td><td><?php echo $pres["fecha_reserva_desde"]; ?></td></tr>
+            <tr><td>Salida:</td><td><?php echo $pres["fecha_reserva_hasta"]; ?></td></tr>
+            <tr><td>Días:</td><td><?php echo $pres["cantidad_dias"]; ?></td></tr>
+            <tr><td>Noches:</td><td><?php echo $pres["cantidad_noches"]; ?></td></tr>
+        </table>
+
+        <h3>Habitaciones Seleccionadas</h3>
+        <table>
+            <?php while ($row = $res_det->fetch_assoc()): ?>
+                <tr>
+                    <td><?php echo $row["descripcion"]; ?></td>
+                    <td><?php echo $row["cantidad_habitaciones"]; ?> hab.</td>
+                </tr>
+            <?php endwhile; ?>
+        </table>
+
+        <h3>Código de Reserva</h3>
+        <table>
+            <tr><td>Código:</td><td><strong><?php echo $codigo; ?></strong></td></tr>
+            <tr><td>Estado:</td><td>PENDIENTE</td></tr>
+        </table>
+
+        <div class="total-final">
+            <h4>Total a Pagar</h4>
+            <span>$<?php echo number_format($pres["monto_total"], 2); ?></span>
         </div>
-    <?php else: ?>
-        <div class="formulario" style="max-width: 500px; padding: 30px; border-left: 5px solid #e74c3c;">
-            <h3 style="color: #e74c3c; margin-top: 0;">Error en la Reserva</h3>
-            <p>Lo sentimos, no pudimos completar su reserva. Por favor, intente nuevamente o <a href="index.php">vuelva al inicio</a>.</p>
-        </div>
-    <?php endif; ?>
+
+        <p class="nota-final">
+            Gracias por reservar con JJM TRAVEL. Pronto nos comunicaremos con usted.
+        </p>
+
+    </div>
 
 </section>
+
+<footer>
+    <p>© 2025 Agencia de Viajes Margarita</p>
+</footer>
 
 </body>
 </html>
