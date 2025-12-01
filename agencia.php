@@ -100,8 +100,8 @@
     <h3>Contáctanos</h3>
     <div class="contacto-info">
         <p>📍 Ubicación Principal Av. 4 de Mayo, Edif. JJM, Porlamar, Edo. Nueva Esparta.</p>
-        <p>📞 Teléfono: +58 295 123 4567</p>
-        <p>📧 Correo Electrónico: <a href="mailto:reservas@jjmtravel.com">jjmtravel.destinos@gmail.com</a></p>
+        <p>📞 Teléfono: +58 424 8739252</p>
+        <p>📧 Correo Electrónico: <a href="mailto:jjmtravel.destinos@gmail.com">jjmtravel.destinos@gmail.com</a></p>
         <p>⏰ Horario de Oficina: Lunes a Viernes (9:00am - 5:00pm)</p>
         <p></p>
     </div>
