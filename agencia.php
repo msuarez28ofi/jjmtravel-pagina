@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <title>Agencia de Viajes Margarita</title>
     <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" href="Imagenes/Pagina Logo 2.png">
 </head>
 <body>
 
 <header>
-    <h1>JJM TRAVEL</h1>
+    <h1>
+  <img src="Imagenes/logo-pagina.png" alt="Logo de JJM TRAVEL" width="40" style="vertical-align: middle; margin-right: 8px;">
+  JJM TRAVEL
+</h1>
     <nav>
         <ul>
             <li><a href="agencia.php">Inicios</a></li> 
@@ -21,7 +25,7 @@
  
 <section class="hero">
     <h2>Explora Margarita con los mejores paquetes turísticos</h2>
-    <p>Hoteles aliados: Sunsol Punta Blanca, Sunsol Ecoland, Hesperia, Agua Dorada</p>
+    
 </section>
 
 <section class="contenido">
