@@ -86,7 +86,7 @@
         </div>
 
         <div class="card paquete-card">
-            <img src="Imagenes/paquete-familia.jpg" alt="Familiar">
+            <img src="Imagenes/promo diversion.png" alt="Familiar">
             <h4>Diversión Familiar</h4>
             <p>5 Días / 4 Noches. Alojamiento en Sunsol Punta Blanca (Isla de Coche), con acceso a club de niños y parques acuáticos cercanos.</p>
             <p class="precio">Desde $290 p/p</p>
