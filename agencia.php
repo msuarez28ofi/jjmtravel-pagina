@@ -103,6 +103,7 @@
         <p>📞 Teléfono: +58 295 123 4567</p>
         <p>📧 Correo Electrónico: <a href="mailto:reservas@jjmtravel.com">jjmtravel.destinos@gmail.com</a></p>
         <p>⏰ Horario de Oficina: Lunes a Viernes (9:00am - 5:00pm)</p>
+        <p></p>
     </div>
 </section>
 
