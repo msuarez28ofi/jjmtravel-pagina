@@ -74,7 +74,7 @@
             <h4>Aventura en la Isla</h4>
             <p>3 Días / 2 Noches. Incluye alojamiento en Sunsol Ecoland, excursión a La Restinga y tour de snorkel en Cubagua. Traslados incluidos.</p>
             <p class="precio">Desde $199 p/p</p>
-            <a href="registro.php" class="btn">¡Lo quiero!</a>
+            
         </div>
 
         <div class="card paquete-card">
@@ -82,7 +82,7 @@
             <h4>Relax de Lujo</h4>
             <p>4 Días / 3 Noches. Alojamiento en Hotel Hesperia, masaje en la playa y cena romántica. Ideal para parejas.</p>
             <p class="precio">Desde $350 p/p</p>
-            <a href="registro.php" class="btn">¡Lo quiero!</a>
+            
         </div>
 
         <div class="card paquete-card">
@@ -90,7 +90,7 @@
             <h4>Diversión Familiar</h4>
             <p>5 Días / 4 Noches. Alojamiento en Sunsol Punta Blanca (Isla de Coche), con acceso a club de niños y parques acuáticos cercanos.</p>
             <p class="precio">Desde $290 p/p</p>
-            <a href="registro.php" class="btn">¡Lo quiero!</a>
+            
         </div>
 
     </div>
