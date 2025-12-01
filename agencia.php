@@ -15,7 +15,7 @@
 </h1>
     <nav>
         <ul>
-            <li><a href="agencia.php">Inicios</a></li> 
+            <li><a href="agencia.php">Inicioo</a></li> 
             <li><a href="#paquetes">Paquetes</a></li>
             <li><a href="registro.php">Reservar</a></li>
             <li><a href="#contacto">Contacto</a></li>
