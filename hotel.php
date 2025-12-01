@@ -4,17 +4,15 @@
 //======================================================================
 
 $hoteles = [
-
     "puntablanca" => [
-        "nombre" => "SUNSOL PUNTA BLANCA", // Usamos mayúsculas para un mejor impacto visual
+        "nombre" => "SUNSOL PUNTA BLANCA",
         "imagen" => "Imagenes/puntablanca.jpg", 
-        "descripcion" => "El hotel ofrece exuberantes jardines exóticos con un toque caribeño de elegancia. Las salas de baño al aire libre brindan un auténtico placer, ya sea bajo el cálido sol o la brillante luz de las estrellas. Es el destino perfecto para familias, parejas en busca de disfrute y amantes del Windsurf y Kitesurf.",
+        "descripcion" => "El hotel ofrece exuberantes jardines exóticos...",
         "galeria" => [
             "Img-punta blanca/sunsol-punta-blanca.jpg",
             "Img-punta blanca/643900249.jpg",
             "Img-punta blanca/pool-by-night.jpg",
             "Img-punta blanca/premium-room.jpg"
-             
         ],
         "servicios" => [
             "Transporte marítimo El Yaque / Isla de Coche",
@@ -22,20 +20,20 @@ $hoteles = [
             "2 Restaurantes",
             "2 Bares",
             "Club de playa",
-            "Snack Bar en una mágica churuata frente al mar",
+            "Snack Bar frente al mar",
             "Parque infantil",
-            "Minimarket (costo adicional)",
-            "Salón para Eventos y Convenciones",
-            "Servicio de Masaje (costo adicional)",
-            "Servicio de toallas y tumbonas en playa y piscina",
-            "Servicio de Wifi gratuito en áreas comunes"
+            "Minimarket",
+            "Salón de Eventos",
+            "Masajes (costo adicional)",
+            "Toallas y tumbonas",
+            "Wifi gratuito"
         ]
     ],
 
     "ecoland" => [
         "nombre" => "SUNSOL ECOLAND",
         "imagen" => "Imagenes/sunsol-ecoland-beach.jpg",
-        "descripcion" => "Un complejo hotelero de categoría 4 estrellas con servicio todo incluido. Ofrece una fusión única de 4 ecosistemas: Laguna, Mar, Duna de Arena y Montaña. Situado en una impresionante bahía de aguas azules y arenas blancas que se extiende a lo largo de un kilómetro.",
+        "descripcion" => "Un complejo hotelero de categoría 4 estrellas...",
         "galeria" => [
             "Img-Ecoland/cdd629d3.avif",
             "Img-Ecoland/sunsol-ecoland-beach (1).jpg",
@@ -46,64 +44,53 @@ $hoteles = [
         "servicios" => [
             "Majestuosa playa",
             "4 Piscinas familiares",
-            "2 Piscina para niños",
-            "Laguna y manglares con paseo en bote a remos",
-            "Boulevard con ciclovía frente al mar",
+            "Piscinas para niños",
+            "Laguna con botes",
+            "Ciclovía frente al mar",
             "Zona de duna recreativa",
-            "Paseos en Kayak",
-            "Canchas de Mini-futbol y futbol 5",
-            "Cancha de Basket 3x3",
-            "Senderismo de montaña hasta el faro",
-            "Golfito con 09 hoyos",
-            "4 Restaurantes buffet y snack",
-            "Bares de playa y piscina",
-            "Parque infantil y club de niños",
-            "Bodegón",
-            "GYM",
-            "Game Room",
-            "Sala de Cine",
-            "Cancha de usos múltiples",
-            "Salones para conferencias",
-            "Servicio de toallas y tumbonas en playa y piscina",
-            "Servicio de Wifi gratuito en áreas comunes y habitaciones (área Laguna)",
-            "Servicio de Taxi"
+            "Kayak",
+            "Canchas deportivas",
+            "Senderismo",
+            "Golfito",
+            "4 Restaurantes",
+            "Bares",
+            "Club de niños",
+            "Gym",
+            "Cine",
+            "Sala de juegos"
         ]
     ],
 
     "hesperia" => [
         "nombre" => "HOTEL HESPERIA",
         "imagen" => "Imagenes/Hesperia.jpg",
-        "descripcion" => "Hotel todo incluido para familias. Aprovecha la calidad de servicios, como desayuno buffet incluido, campo de golf y bar en la playa. Es el lugar ideal para relajarte bajo el sol, ya que cuenta con ubicación frente a la playa, camas de playa gratuitas y masajes en la playa.",
+        "descripcion" => "Hotel todo incluido para familias...",
         "galeria" => [
             "Img-Hesperia/46921802.jpg",
             "Img-Hesperia/46921827.jpg",
             "Img-Hesperia/107852563.jpg",
             "Img-Hesperia/301495231.jpg",
-             "Img-Hesperia/668966720.jpg"
+            "Img-Hesperia/668966720.jpg"
         ],
         "servicios" => [
-            "Desayuno buffet incluido",
+            "Desayuno buffet",
             "Campo de golf",
             "Bar en la playa",
-            "Ubicación frente a la playa, camas de playa gratuitas",
-            "Masajes en la playa (costo adicional)",
-            "Aromaterapia, masajes y hidroterapia en el spa (costo adicional)",
-            "3 Restaurantes",
-            "Yoga en la playa y vóleibol de playa",
-            "Wifi gratis en las habitaciones (25+ Mbps)",
-            "Bar junto a la alberca",
-            "Supermercado o tienda de conveniencia",
-            "Alberca al aire libre y chapoteadero con camas balinesas gratuitas",
-            "Estacionamiento gratis",
-            "Club de playa con acceso gratuito",
-            "Salón de baile, servicio de concierge y personal multilingüe"
+            "Masajes en la playa",
+            "Spa (costo adicional)",
+            "Restaurantes",
+            "Volleyball de playa",
+            "Wifi rápido",
+            "Supermercado",
+            "Piscina con camas Bali",
+            "Estacionamiento gratuito"
         ]
     ],
 
     "aguadorada" => [
         "nombre" => "HOTEL AGUA DORADA",
         "imagen" => "Imagenes/lidotel-agua-dorada-beach-htl-la-mira-pic-21.jpg",
-        "descripcion" => "Agua Dorada Beach Hotel en el corazón de Playa el Agua en la Isla de Margarita, con una privilegiada ubicación frente al mar. Resulta el lugar ideal para viajeros que desean disfrutar de unas vacaciones relajantes, resaltando toda la belleza natural de su entorno.",
+        "descripcion" => "Ubicado en Playa el Agua...",
         "galeria" => [
             "Img-Agua dorada/agua-dorada-isla-de-margarita (1).jpg",
             "Img-Agua dorada/agua-dorada-isla-de-margarita (2).jpg",
@@ -116,7 +103,7 @@ $hoteles = [
             "Club de playa",
             "Piscina",
             "Restaurante",
-            "Benji´s bar",
+            "Benji’s bar",
             "Kids club",
             "Salón de eventos"
         ]
@@ -124,7 +111,7 @@ $hoteles = [
 ];
 
 //=============================
-// OBTENER EL HOTEL SELECCIONADO
+// VALIDAR HOTEL
 //=============================
 
 $seleccion = $_GET["hotel"] ?? "";
@@ -150,9 +137,8 @@ $hotel = $hoteles[$seleccion];
     <nav>
         <ul>
             <li><a href="agencia.php">Inicio</a></li>
-            <!-- EL BOTÓN DE RESERVA AQUÍ DEBE SER GENÉRICO SI NO HAY HOTEL SELECCIONADO, PERO LO DEJAMOS ASÍ POR AHORA -->
-            <li><a href="registro.php">Reservar</a></li> 
-            <li></li>
+            <!-- FIX IMPORTANTE -->
+            <li><a href="registro.php?hotel=<?php echo $seleccion; ?>">Reservar</a></li>
         </ul>
     </nav>
 </header>
@@ -162,28 +148,25 @@ $hotel = $hoteles[$seleccion];
     <h2 class="nombre-hotel-grande"><?php echo $hotel["nombre"]; ?></h2>
 
     <div class="slider-container">
-        <!-- Contenido del Slider y la Galería -->
         <div class="image-slider">
             <?php foreach ($hotel["galeria"] as $img_src): ?>
                 <img src="<?php echo $img_src; ?>" alt="Galería de <?php echo $hotel['nombre']; ?>">
             <?php endforeach; ?>
         </div>
-         <div class="slider-nav">
-             <!-- Los puntos de navegación del slider (no están implementados) -->
-         </div>
+        <div class="slider-nav"></div>
     </div>
 
-    <h3 style= "font-size: 3.5rem;">Descripción</h3>
+    <h3 style="font-size: 3.5rem;">Descripción</h3>
     <p><?php echo $hotel["descripcion"]; ?></p>
 
-    <h3 style= "font-size: 3.5rem;">Servicios incluidos</h3>
+    <h3 style="font-size: 3.5rem;">Servicios incluidos</h3>
     <ul class="servicios">
         <?php foreach ($hotel["servicios"] as $servicio): ?>
             <li><?php echo $servicio; ?></li>
         <?php endforeach; ?>
     </ul>
 
-    <!-- CORRECCIÓN CLAVE: El botón "Reservar ahora" debe pasar la clave del hotel a registro.php -->
+    <!-- FIX IMPORTANTE -->
     <a href="registro.php?hotel=<?php echo $seleccion; ?>" class="btn">Reservar ahora</a>
 
 </section>

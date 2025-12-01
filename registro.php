@@ -1,117 +1,167 @@
 <?php
 require_once "conexion.php";
 
-$errores = [];
-$success = null;
+// =====================================================
+// VALIDAR HOTEL RECIBIDO
+// =====================================================
+$hotel_code = $_GET["hotel"] ?? "";
 
+if ($hotel_code === "") {
+    die("Error: hotel no recibido.");
+}
+
+// =====================================================
+// OBTENER ID DEL HOTEL DESDE LA BD
+// =====================================================
+$stmt = $conn->prepare("
+    SELECT id_hotel, nombre 
+    FROM hoteles 
+    WHERE LOWER(REPLACE(nombre, ' ', '')) = ?
+");
+$stmt->bind_param("s", $hotel_code);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    die("Error: hotel no existe en BD.");
+}
+
+$hotel_db = $result->fetch_assoc();
+$id_hotel = $hotel_db["id_hotel"];
+$nombre_hotel = $hotel_db["nombre"];
+
+// =====================================================
+// SI VIENE EL FORMULARIO, GUARDAR TODO
+// =====================================================
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Sanitizar y validar datos básicos
-    $nombre  = trim($_POST['nombre'] ?? '');
-    $apellido= trim($_POST['apellido'] ?? '');
-    $tipo_doc= intval($_POST['id_tipo_documento'] ?? 1); // por defecto 1 (V)
-    $documento = trim($_POST['cedula'] ?? '');
-    $telefono  = trim($_POST['telefono'] ?? '');
-    $email     = trim($_POST['correo'] ?? '');
 
-    if ($nombre === '' || $apellido === '') {
-        $errores[] = "Nombre y apellido son obligatorios.";
-    }
-    if ($documento === '') {
-        $errores[] = "Número de documento obligatorio.";
-    }
-    if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errores[] = "Formato de correo no válido.";
+    $fecha_desde = $_POST["desde"];
+    $fecha_hasta = $_POST["hasta"];
+    $cantidad_personas = intval($_POST["personas"]);
+
+    // habitaciones
+    $cant_indiv = intval($_POST["hab_individual"]);
+    $cant_doble = intval($_POST["hab_doble"]);
+    $cant_triple = intval($_POST["hab_triple"]);
+    $cant_cuadruple = intval($_POST["hab_cuadruple"]);
+
+    // VALIDACIÓN SIMPLE
+    if ($fecha_desde === "" || $fecha_hasta === "") {
+        die("Fechas inválidas.");
     }
 
-    if (empty($errores)) {
-        // Preparar llamada al procedimiento almacenado
-        // Usaremos multi_query para manejar el SELECT retornado por el SP
-        $p_nombre  = $conn->real_escape_string($nombre);
-        $p_apellido= $conn->real_escape_string($apellido);
-        $p_doc     = $conn->real_escape_string($documento);
-        $p_tel     = $conn->real_escape_string($telefono);
-        $p_email   = $conn->real_escape_string($email);
-        $p_tipo    = intval($tipo_doc);
+    if ($cantidad_personas <= 0) {
+        die("La cantidad de personas no puede ser cero.");
+    }
 
-        // Construir la llamada (usamos parámetros ya escapados)
-        $sql = "CALL sp_insertar_turista('$p_nombre', '$p_apellido', $p_tipo, '$p_doc', '$p_tel', '$p_email')";
+    // =====================================================
+    // 1) INSERTAR PRESUPUESTO (SIN CALCULAR DÍAS — LO CALCULA EL TRIGGER)
+    // =====================================================
+    $stmt = $conn->prepare("
+        INSERT INTO presupuesto_reservas
+            (id_turista, id_tarifario, fecha_reserva_desde, fecha_reserva_hasta, cantidad_personas, traslado_decimal, monto_total)
+        VALUES
+            (1, 0, ?, ?, ?, 0, 0)
+    ");
+    $stmt->bind_param("ssi", $fecha_desde, $fecha_hasta, $cantidad_personas);
+    $stmt->execute();
 
-        if ($conn->multi_query($sql)) {
-            // Obtener primer resultado (el SELECT que devuelve id_turista)
-            if ($result = $conn->store_result()) {
-                $row = $result->fetch_assoc();
-                $id_turista = $row['id_turista'] ?? null;
-                $result->free();
-                // limpiar conjuntos de resultados pendientes
-                while ($conn->more_results() && $conn->next_result()) {
-                    $extraResult = $conn->store_result();
-                    if ($extraResult) { $extraResult->free(); }
-                }
+    $id_presupuesto = $conn->insert_id;
 
-                if ($id_turista) {
-                    $success = "Turista registrado (o encontrado). ID: " . $id_turista;
-                    // Redirigir a la siguiente página (presupuesto) pasando id_turista
-                    header("Location: presupuesto.php?id_turista=" . intval($id_turista));
-                    exit();
-                } else {
-                    $errores[] = "No se pudo obtener el ID del turista.";
-                }
-            } else {
-                $errores[] = "Error al ejecutar el procedimiento.";
-            }
-        } else {
-            $errores[] = "Error en la llamada SQL: " . $conn->error;
+    // =====================================================
+    // 2) OBTENER TIPOS DE HABITACIÓN DESDE LA BD
+    // =====================================================
+    $tipos = $conn->query("SELECT * FROM tipo_habitaciones");
+
+    // =====================================================
+    // 3) INSERTAR DETALLE DE HABITACIONES
+    // =====================================================
+    while ($row = $tipos->fetch_assoc()) {
+        $id_tipo = $row["id_tipo_habitacion"];
+        $descripcion = strtolower($row["descripcion"]);
+
+        $cantidad = 0;
+        if ($descripcion === "individual")     $cantidad = $cant_indiv;
+        if ($descripcion === "doble")          $cantidad = $cant_doble;
+        if ($descripcion === "triple")         $cantidad = $cant_triple;
+        if ($descripcion === "cuadruple")      $cantidad = $cant_cuadruple;
+
+        if ($cantidad > 0) {
+            $stmt2 = $conn->prepare("
+                INSERT INTO detalle_habitaciones_presupuesto
+                    (id_presupuesto, id_tipo_habitacion, cantidad_habitaciones)
+                VALUES (?, ?, ?)
+            ");
+            $stmt2->bind_param("iii", $id_presupuesto, $id_tipo, $cantidad);
+            $stmt2->execute();
         }
     }
+
+    // =====================================================
+    // 4) REDIRECCIÓN A PAQUETE.PHP
+    // =====================================================
+    header("Location: paquete.php?id_presupuesto=" . $id_presupuesto . "&hotel=" . $hotel_code);
+    exit;
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro del Turista</title>
+    <title>Registro de Reserva</title>
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-<header><h1>Registro del Turista</h1></header>
+
+<header>
+    <h1>JJM TRAVEL</h1>
+    <nav>
+        <ul>
+            <li><a href="agencia.php">Inicio</a></li>
+        </ul>
+    </nav>
+</header>
+
 <section class="contenido">
-    <?php if (!empty($errores)): ?>
-        <div style="background:#ffd6d6;padding:10px;border-radius:6px;margin-bottom:12px;">
-            <?php foreach($errores as $e) echo "<div>- " . htmlspecialchars($e) . "</div>"; ?>
-        </div>
-    <?php endif; ?>
 
-    <?php if ($success): ?>
-        <div style="background:#d6ffd8;padding:10px;border-radius:6px;margin-bottom:12px;">
-            <?php echo htmlspecialchars($success); ?>
-        </div>
-    <?php endif; ?>
+    <h2 style="font-size:3rem;">Reservar en: <?php echo $nombre_hotel; ?></h2>
 
-    <form method="POST" class="formulario" novalidate>
-        <label>Nombre:</label>
-        <input type="text" name="nombre" required value="<?php echo htmlspecialchars($_POST['nombre'] ?? ''); ?>">
+    <form action="" method="POST" class="formulario-reserva">
 
-        <label>Apellido:</label>
-        <input type="text" name="apellido" required value="<?php echo htmlspecialchars($_POST['apellido'] ?? ''); ?>">
+        <label>Fecha desde:</label>
+        <input type="date" name="desde" required>
 
-        <label>Tipo de documento:</label>
-        <select name="id_tipo_documento">
-            <option value="1">V - Venezolano</option>
-            <option value="2">E - Extranjero</option>
-        </select>
+        <label>Fecha hasta:</label>
+        <input type="date" name="hasta" required>
 
-        <label>Cédula / Pasaporte:</label>
-        <input type="text" name="cedula" required value="<?php echo htmlspecialchars($_POST['cedula'] ?? ''); ?>">
+        <label>Cantidad de personas:</label>
+        <input type="number" name="personas" min="1" required>
 
-        <label>Teléfono:</label>
-        <input type="text" name="telefono" value="<?php echo htmlspecialchars($_POST['telefono'] ?? ''); ?>">
+        <h3>Habitaciones</h3>
 
-        <label>Correo Electrónico:</label>
-        <input type="email" name="correo" value="<?php echo htmlspecialchars($_POST['correo'] ?? ''); ?>">
+        <label>Individual:</label>
+        <input type="number" name="hab_individual" min="0" value="0">
+
+        <label>Doble:</label>
+        <input type="number" name="hab_doble" min="0" value="0">
+
+        <label>Triple:</label>
+        <input type="number" name="hab_triple" min="0" value="0">
+
+        <label>Cuádruple:</label>
+        <input type="number" name="hab_cuadruple" min="0" value="0">
 
         <button type="submit" class="btn">Continuar</button>
+
     </form>
+
 </section>
-<footer><p>© 2025 Agencia de Viajes Margarita</p></footer>
+
+<footer>
+    <p>© 2025 Agencia de Viajes Margarita</p>
+</footer>
+
 </body>
 </html>
