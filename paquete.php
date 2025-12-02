@@ -1,19 +1,6 @@
 <?php
 require_once "conexion.php";
 
-// ======================================================
-// MISMO MAPEO QUE hotel.php Y registro.php
-// (Solo PuntaBlanca y EcoLand necesitan corrección)
-// ======================================================
-$mapa_hoteles = [
-    "puntablanca" => "SUNSOL PUNTA BLANCA",
-    "ecoland"     => "SUNSOL ECOLAND",
-
-    // Estos ya funcionaban perfectamente con sus claves
-    "hesperia"    => "HOTEL HESPERIA",
-    "aguadorada"  => "HOTEL AGUA DORADA"
-];
-
 // ===============================================
 // VALIDAR DATOS RECIBIDOS
 // ===============================================
@@ -24,30 +11,32 @@ if ($id_presupuesto == 0 || $hotel_code == "") {
     die("Error: datos incompletos.");
 }
 
-// ===============================================
-// VALIDAR QUE EL HOTEL EXISTA EN EL MAPEO
-// ===============================================
-if (!isset($mapa_hoteles[$hotel_code])) {
-    die("Error: hotel no existe en el mapa interno.");
+// ========================================================
+// MISMO MÉTODO QUE EN REGISTRO.PHP PARA ENCONTRAR EL HOTEL
+// ========================================================
+$mapa_hoteles = [
+    "puntablanca" => "SUNSOL PUNTA BLANCA",
+    "ecoland"     => "SUNSOL ECOLAND"
+];
+
+if (isset($mapa_hoteles[$hotel_code])) {
+    $busqueda = $mapa_hoteles[$hotel_code];
+    $comparacion_sql = "nombre = ?";
+} else {
+    $busqueda = $hotel_code;
+    $comparacion_sql = "LOWER(REPLACE(nombre, ' ', '')) = ?";
 }
 
-$nombre_real = $mapa_hoteles[$hotel_code];
-
-// ===============================================
-// OBTENER HOTEL DESDE BD
-// ===============================================
 $stmt = $conn->prepare("
-    SELECT id_hotel, nombre
+    SELECT id_hotel, nombre 
     FROM hoteles
-    WHERE nombre = ?
+    WHERE $comparacion_sql
 ");
-$stmt->bind_param("s", $nombre_real);
+$stmt->bind_param("s", $busqueda);
 $stmt->execute();
 $rs = $stmt->get_result();
 
-if ($rs->num_rows == 0) {
-    die("Error: hotel no encontrado en la BD.");
-}
+if ($rs->num_rows == 0) die("Error: hotel no encontrado.");
 
 $hotel = $rs->fetch_assoc();
 $id_hotel = $hotel["id_hotel"];
@@ -69,6 +58,7 @@ $desde      = $pres["fecha_reserva_desde"];
 $hasta      = $pres["fecha_reserva_hasta"];
 $noches     = $pres["cantidad_noches"];
 $personas   = $pres["cantidad_personas"];
+$traslado   = intval($pres["traslado_decimal"]); // 1 = si, 0 = no
 
 // ===============================================
 // OBTENER HABITACIONES DEL PRESUPUESTO
@@ -90,7 +80,7 @@ $tarifas_query = $conn->query("
     WHERE id_hotel = $id_hotel
 ");
 
-// Guardamos tarifas en arreglo cómodo
+// Guardamos tarifas en arreglo
 $tarifas = [];
 while ($t = $tarifas_query->fetch_assoc()) {
     $tarifas[$t["id_tipo_habitacion"]] = $t["tarifa"];
@@ -114,11 +104,22 @@ while ($h = $habitaciones->fetch_assoc()) {
     }
 
     $tarifa = $tarifas[$id_tipo];
-
     $subtotal = $tarifa * $cantidad * $noches;
+
     $total_general += $subtotal;
 
-    $lineas[] = "$cantidad x Habitación $descripcion → $tarifa USD/noche → $subtotal USD";
+    $lineas[] = "$cantidad × Habitación $descripcion → $tarifa USD/noche → $subtotal USD";
+}
+
+// ===============================
+// SUMAR TRASLADO (SI LO PIDIERON)
+// ===============================
+$costo_traslado = 0;
+
+if ($traslado == 1) {
+    $costo_traslado = 15;  // costo fijo
+    $total_general += $costo_traslado;
+    $lineas[] = "Traslado: 15 USD (opcional)";
 }
 
 // ===============================================
@@ -161,6 +162,12 @@ $stmt->execute();
     <p><b>Noches:</b> <?php echo $noches; ?></p>
     <p><b>Personas:</b> <?php echo $personas; ?></p>
 
+    <?php if ($traslado == 1): ?>
+        <p><b>Traslado incluido:</b> Sí (15 USD)</p>
+    <?php else: ?>
+        <p><b>Traslado incluido:</b> No</p>
+    <?php endif; ?>
+
     <h3>Detalle de habitaciones</h3>
     <ul>
         <?php foreach ($lineas as $linea): ?>
@@ -181,3 +188,4 @@ $stmt->execute();
 
 </body>
 </html>
+
