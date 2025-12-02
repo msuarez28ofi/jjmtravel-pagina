@@ -90,7 +90,9 @@ if ($rs->num_rows > 0) {
     <meta charset="UTF-8">
     <title>Confirmación de Reserva</title>
     <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" href="Imagenes/Pagina Logo 2.png">
 </head>
+
 <body>
 
 <header>
@@ -104,20 +106,38 @@ if ($rs->num_rows > 0) {
 
 <section class="contenido">
 
-    <h2 style="font-size:3rem;">¡Reserva generada con éxito!</h2>
+    <!-- TÍTULO DE ÉXITO -->
+    <div class="titulo-confirmado">
+        <span class="icono-exito">✔</span>
+        <h2>RESERVA GENERADA CON ÉXITO</h2>
+    </div>
 
-    <div class="card-reserva">
+    <!-- TARJETA DE INFORMACIÓN -->
+    <div class="card-reserva-final">
+
+        <h3 class="subtitulo">Resumen de la Reserva</h3>
+
         <p><b>Código de reserva:</b> <?php echo $codigo_reserva; ?></p>
         <p><b>Monto total:</b> <?php echo number_format($monto_total, 2); ?> USD</p>
         <p><b>Status actual:</b> <?php echo $status; ?></p>
         <p><b>Fecha de creación:</b> <?php echo $fecha_creacion; ?></p>
+
+        <div class="total-box">
+            <h2>Total Pagado</h2>
+            <span>$<?php echo number_format($monto_total, 2); ?></span>
+        </div>
+
     </div>
 
-    <br><br>
+    <br>
 
-    <a href="agencia.php" class="btn">Volver al inicio</a>
+    <a href="agencia.php" class="btn btn-confirmar">Volver al inicio</a>
 
 </section>
 
 <footer>
-    <p>© 2025 Agencia d
+    <p>© 2025 Agencia de Viajes Margarita</p>
+</footer>
+
+</body>
+</html>

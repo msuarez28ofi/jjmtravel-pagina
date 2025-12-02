@@ -222,6 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <title>Registro de Reserva</title>
     <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" href="Imagenes/Pagina Logo 2.png">
 </head>
 <body>
 
@@ -236,9 +237,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <section class="contenido">
 
-    <h2 style="font-size:3rem;">Reservar en: <?php echo htmlspecialchars($nombre_hotel); ?></h2>
+    <h2 style="font-size:3rem; text-align:center; margin-bottom:25px;">
+        Reservar en: <?php echo htmlspecialchars($nombre_hotel); ?>
+    </h2>
 
-    <form action="" method="POST" class="formulario-reserva">
+    <!-- FORMULARIO MODERNO Y VERTICAL -->
+    <form action="" method="POST" class="form-reserva-vertical">
+
+        <h3 class="titulo-form">Datos de la Reserva</h3>
 
         <label>Fecha desde:</label>
         <input type="date" name="desde" required>
@@ -249,7 +255,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <label>Cantidad de personas:</label>
         <input type="number" name="personas" min="1" required>
 
-        <h3>Habitaciones</h3>
+        <h3 class="titulo-form">Habitaciones</h3>
 
         <label>Individual:</label>
         <input type="number" name="hab_individual" min="0" value="0">
@@ -263,11 +269,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <label>Cuádruple:</label>
         <input type="number" name="hab_cuadruple" min="0" value="0">
 
-        <label style="margin-top:15px;">
-            <input type="checkbox" name="traslado"> Incluir traslado (15 USD)
+        <label style="margin-top:15px; display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" name="traslado">
+            Incluir traslado (15 USD)
         </label>
 
-        <button type="submit" class="btn">Continuar</button>
+        <button type="submit" class="btn btn-reserva">Continuar</button>
 
     </form>
 

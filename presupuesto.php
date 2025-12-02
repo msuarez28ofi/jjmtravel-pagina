@@ -31,6 +31,7 @@ if (!isset($TARIFAS[$hotel])) {
     <meta charset="UTF-8">
     <title>Seleccionar Paquete</title>
     <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" href="Imagenes/Pagina Logo 2.png">
 </head>
 
 <body>

@@ -74,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <title>Datos del Turista</title>
     <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" href="Imagenes/Pagina Logo 2.png">
 </head>
 <body>
 
@@ -87,9 +88,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </header>
 
 <section class="contenido">
-    <h2 style="font-size:3rem;">Datos del Turista</h2>
+    
+    <h2 style="font-size:3rem; text-align:center; margin-bottom:25px;">
+        Datos del Turista
+    </h2>
 
-    <form method="POST" class="formulario-reserva">
+    <!-- FORMULARIO PROFESIONAL VERTICAL -->
+    <form method="POST" class="form-turista-vertical">
+
+        <h3 class="titulo-form">Información Personal</h3>
 
         <label>Nombre:</label>
         <input type="text" name="nombre" required>
@@ -104,8 +111,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $docs = $conn->query("SELECT * FROM tipo_documento ORDER BY descripcion");
             while ($d = $docs->fetch_assoc()):
             ?>
-                <option value="<?php echo $d['id_tipo_documento']; ?>">
-                    <?php echo $d['descripcion']; ?>
+                <option value="<?= $d['id_tipo_documento']; ?>">
+                    <?= $d['descripcion']; ?>
                 </option>
             <?php endwhile; ?>
         </select>
@@ -113,13 +120,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <label>Número de documento:</label>
         <input type="text" name="numero_documento" required>
 
+        <h3 class="titulo-form">Contacto</h3>
+
         <label>Teléfono:</label>
         <input type="text" name="telefono" required>
 
         <label>Email:</label>
         <input type="email" name="email" required>
 
-        <button type="submit" class="btn">Continuar</button>
+        <button type="submit" class="btn btn-turista">Continuar</button>
 
     </form>
 

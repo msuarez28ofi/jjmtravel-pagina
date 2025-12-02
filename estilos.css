@@ -411,3 +411,232 @@ footer {
     font-style: italic;
     color: #555;
 }
+
+/* ==========================================
+   FORMULARIO TURISTA — ESTILO PROFESIONAL
+========================================== */
+
+.form-turista-vertical {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    max-width: 450px;
+    margin: 0 auto;
+    margin-top: 30px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.18);
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-turista-vertical label {
+    font-weight: bold;
+    color: #0a3d62;
+}
+
+.form-turista-vertical input,
+.form-turista-vertical select {
+    padding: 12px;
+    border: 1px solid #b5b5b5;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.btn-turista {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* ==========================================
+   FORMULARIO VERTICAL PROFESIONAL Y MODERNO
+========================================== */
+
+.form-reserva-vertical {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    max-width: 450px;
+    margin: 0 auto;
+    margin-top: 30px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.18);
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.titulo-form {
+    font-size: 1.3rem;
+    color: #0a3d62;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    border-left: 4px solid #0a3d62;
+    padding-left: 10px;
+}
+
+.form-reserva-vertical label {
+    font-weight: bold;
+    color: #0a3d62;
+}
+
+.form-reserva-vertical input,
+.form-reserva-vertical select {
+    padding: 12px;
+    border: 1px solid #b5b5b5;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.btn-reserva {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* ==========================================
+   RESUMEN DEL PAQUETE — DISEÑO PROFESIONAL
+========================================== */
+
+.card-resumen {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 25px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.18);
+}
+
+.card-resumen p {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.lista-habitaciones {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.lista-habitaciones li {
+    background: #eef5ff;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    border-left: 4px solid #0a3d62;
+    font-weight: 500;
+}
+
+.total-box {
+    background: #0a3d62;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.total-box h2 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.total-box span {
+    font-size: 2.5rem;
+    font-weight: 800;
+    display: block;
+    margin-top: 10px;
+}
+
+.btn-confirmar {
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    padding: 14px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #0a3d62;
+    color: white;
+    margin-top: 20px;
+}
+
+.btn-confirmar:hover {
+    background: #064769;
+}
+
+/* ==========================================
+   CONFIRMACIÓN FINAL DE RESERVA (DISEÑO PRO)
+========================================== */
+
+.titulo-confirmado {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.icono-exito {
+    font-size: 2.5rem;
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.card-reserva-final {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.18);
+}
+
+.card-reserva-final p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.subtitulo {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    border-left: 4px solid #0a3d62;
+    padding-left: 10px;
+    color: #0a3d62;
+}
+
+.total-box {
+    background: #0a3d62;
+    color: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.total-box span {
+    font-size: 2.3rem;
+    font-weight: bold;
+    display: block;
+    margin-top: 8px;
+}
+
+.btn-confirmar {
+    display: inline-block;
+    padding: 14px 28px;
+    background: #0a3d62;
+    color: white;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    text-decoration: none;
+}
+
+.btn-confirmar:hover {
+    background: #064769;
+}

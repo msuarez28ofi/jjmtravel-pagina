@@ -140,6 +140,7 @@ $stmt->execute();
     <meta charset="UTF-8">
     <title>Paquete - Resumen</title>
     <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" href="Imagenes/Pagina Logo 2.png">
 </head>
 <body>
 
@@ -154,31 +155,48 @@ $stmt->execute();
 
 <section class="contenido">
 
-    <h2 style="font-size:3rem;">Resumen del Paquete</h2>
-    <h3>Hotel seleccionado: <b><?php echo $nombre_hotel; ?></b></h3>
+    <h2 style="font-size:3rem; text-align:center; margin-bottom:25px;">
+        Resumen del Paquete
+    </h2>
 
-    <p><b>Fecha desde:</b> <?php echo $desde; ?></p>
-    <p><b>Fecha hasta:</b> <?php echo $hasta; ?></p>
-    <p><b>Noches:</b> <?php echo $noches; ?></p>
-    <p><b>Personas:</b> <?php echo $personas; ?></p>
+    <!-- TARJETA RESUMEN -->
+    <div class="card-resumen">
 
-    <?php if ($traslado == 1): ?>
-        <p><b>Traslado incluido:</b> Sí (15 USD)</p>
-    <?php else: ?>
-        <p><b>Traslado incluido:</b> No</p>
-    <?php endif; ?>
+        <h3 class="titulo-form">Hotel Seleccionado</h3>
+        <p><b><?php echo $nombre_hotel; ?></b></p>
 
-    <h3>Detalle de habitaciones</h3>
-    <ul>
-        <?php foreach ($lineas as $linea): ?>
-            <li><?php echo $linea; ?></li>
-        <?php endforeach; ?>
-    </ul>
+        <h3 class="titulo-form">Fechas</h3>
+        <p><b>Desde:</b> <?php echo $desde; ?></p>
+        <p><b>Hasta:</b> <?php echo $hasta; ?></p>
+        <p><b>Noches:</b> <?php echo $noches; ?></p>
 
-    <h2>Total del paquete: <b><?php echo number_format($total_general, 2); ?> USD</b></h2>
+        <h3 class="titulo-form">Detalles del Viaje</h3>
+        <p><b>Personas:</b> <?php echo $personas; ?></p>
 
-    <br>
-    <a class="btn" href="reserva.php?id_presupuesto=<?php echo $id_presupuesto; ?>">Confirmar Reserva</a>
+        <?php if ($traslado == 1): ?>
+            <p><b>Traslado incluido:</b> Sí (15 USD)</p>
+        <?php else: ?>
+            <p><b>Traslado incluido:</b> No</p>
+        <?php endif; ?>
+
+        <h3 class="titulo-form">Distribución de Habitaciones</h3>
+        <ul class="lista-habitaciones">
+            <?php foreach ($lineas as $linea): ?>
+                <li><?php echo $linea; ?></li>
+            <?php endforeach; ?>
+        </ul>
+
+        <div class="total-box">
+            <h2>Total del Paquete</h2>
+            <span><?php echo number_format($total_general, 2); ?> USD</span>
+        </div>
+
+        <a class="btn btn-confirmar" 
+           href="reserva.php?id_presupuesto=<?php echo $id_presupuesto; ?>">
+           Confirmar Reserva
+        </a>
+
+    </div>
 
 </section>
 

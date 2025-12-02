@@ -7,7 +7,7 @@ $hoteles = [
     "puntablanca" => [
         "nombre" => "SUNSOL PUNTA BLANCA",
         "imagen" => "Imagenes/puntablanca.jpg", 
-        "descripcion" => "El hotel ofrece exuberantes jardines exóticos...",
+        "descripcion" => "SUNSOL Punta Blanca es un refugio paradisíaco ubicado en la tranquila y hermosa Isla de Coche, conocido por su ambiente relajado, sus extensas playas de arena blanca y su característico mar color turquesa. Este hotel se destaca por ofrecer una experiencia tropical auténtica, ideal para quienes buscan desconectarse del ruido y sumergirse en un entorno natural único.",
         "galeria" => [
             "Img-punta blanca/sunsol-punta-blanca.jpg",
             "Img-punta blanca/643900249.jpg",
@@ -33,7 +33,7 @@ $hoteles = [
     "ecoland" => [
         "nombre" => "SUNSOL ECOLAND",
         "imagen" => "Imagenes/sunsol-ecoland-beach.jpg",
-        "descripcion" => "Un complejo hotelero de categoría 4 estrellas...",
+        "descripcion" => "SUNSOL Ecoland es un encantador hotel rodeado de naturaleza, diseñado para ofrecer una experiencia tranquila y armoniosa en el corazón de Margarita. Con un ambiente familiar y relajado, este alojamiento se distingue por sus amplias áreas verdes, su arquitectura caribeña y su atmósfera serena que invita a desconectarse y disfrutar del entorno natural.",
         "galeria" => [
             "Img-Ecoland/cdd629d3.avif",
             "Img-Ecoland/sunsol-ecoland-beach (1).jpg",
@@ -64,7 +64,7 @@ $hoteles = [
     "hesperia" => [
         "nombre" => "HOTEL HESPERIA",
         "imagen" => "Imagenes/Hesperia.jpg",
-        "descripcion" => "Hotel todo incluido para familias...",
+        "descripcion" => "El Hotel Hesperia Isla Margarita es uno de los complejos más emblemáticos de la isla, reconocido por su amplia infraestructura, su ambiente elegante y su ubicación privilegiada rodeada de paisajes naturales. Situado a pocos minutos de SUNSOL Ecoland, este hotel ofrece un entorno tranquilo y espacioso, perfecto para quienes desean relajarse y disfrutar del ambiente caribeño en un espacio de gran amplitud.",
         "galeria" => [
             "Img-Hesperia/46921802.jpg",
             "Img-Hesperia/46921827.jpg",
@@ -90,7 +90,7 @@ $hoteles = [
     "aguadorada" => [
         "nombre" => "HOTEL AGUA DORADA",
         "imagen" => "Imagenes/lidotel-agua-dorada-beach-htl-la-mira-pic-21.jpg",
-        "descripcion" => "Ubicado en Playa el Agua...",
+        "descripcion" => "Ubicado en una de las zonas más exclusivas de la isla, el Hotel Agua Dorada ofrece una experiencia moderna, relajante y con un estilo boutique que combina elegancia y comodidad. Situado frente a las aguas cristalinas de Playa El Agua, este hotel destaca por su ambiente tranquilo, su diseño contemporáneo y su servicio orientado al detalle, ideal para viajeros que buscan descanso, confort y una ubicación privilegiada al borde del mar.",
         "galeria" => [
             "Img-Agua dorada/agua-dorada-isla-de-margarita (1).jpg",
             "Img-Agua dorada/agua-dorada-isla-de-margarita (2).jpg",
@@ -129,6 +129,7 @@ $hotel = $hoteles[$seleccion];
     <meta charset="UTF-8">
     <title><?php echo $hotel["nombre"]; ?></title>
     <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" href="Imagenes/Pagina Logo 2.png">
 </head>
 <body>
 

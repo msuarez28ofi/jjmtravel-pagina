@@ -7,7 +7,7 @@
     <link rel="icon" href="Imagenes/Pagina Logo 2.png">
 </head>
 <body>
-
+ 
 <header>
     <h1>
   <img src="Imagenes/logo-pagina.png" alt="Logo de JJM TRAVEL" width="40" style="vertical-align: middle; margin-right: 8px;">
